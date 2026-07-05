@@ -1,17 +1,39 @@
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { profile } from "@/data/profile";
 import { HeroAtmosphere } from "@/components/HeroAtmosphere";
+import { HeroScene } from "@/components/3d/HeroScene";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { easeOutSoft } from "@/lib/motion";
 
 export function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(true);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <section
+      ref={containerRef}
       id="hero"
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-24"
     >
       <HeroAtmosphere />
+      {inView && <HeroScene />}
 
       <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 gap-16 px-6 md:grid-cols-[1.4fr_1fr] md:items-end">
         <div>
@@ -88,8 +110,8 @@ export function Hero() {
           {[
             { k: "Focus", v: profile.focus[0] },
             { k: "Based", v: profile.location },
-            { k: "Since", v: "2020" },
-            { k: "Ships", v: "in prod" },
+            { k: "Since", v: profile.since },
+            { k: "Ships", v: profile.ships },
           ].map((s) => (
             <div key={s.k}>
               <dt className="eyebrow">{s.k}</dt>

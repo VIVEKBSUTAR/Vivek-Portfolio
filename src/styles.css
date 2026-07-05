@@ -69,7 +69,7 @@
   --color-sidebar-ring: var(--accent);
 
   --shadow-elevated: 0 24px 60px -30px oklch(0 0 0 / 0.55), 0 2px 6px -1px oklch(0 0 0 / 0.25);
-  --shadow-glass: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 20px 50px -20px oklch(0 0 0 / 0.5);
+  --shadow-glass: inset 0 1.5px 1px oklch(1 0 0 / 0.12), inset 0 -1px 0 oklch(0 0 0 / 0.22), 0 24px 60px -24px oklch(0 0 0 / 0.55);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
@@ -147,9 +147,26 @@
 }
 
 @utility glass {
-  background: color-mix(in oklch, var(--surface) 65%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
+  background: color-mix(in oklch, var(--surface) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(150%);
   border: 1px solid var(--border-hairline);
+  box-shadow: var(--shadow-glass);
+}
+
+@utility blueprint-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, color-mix(in oklch, var(--border-hairline) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--border-hairline) 35%, transparent) 1px, transparent 1px);
+  background-position: center;
+}
+
+@utility active-compress {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  &:active {
+    transform: scale(0.96) !important;
+    transition-duration: 80ms;
+  }
 }
 
 @utility hairline-b {
@@ -222,14 +239,51 @@
 /* Sibling-dim: children marked [data-dim-item] soften while a sibling is
    hovered within a [data-dim-siblings] container. */
 [data-dim-siblings]:hover [data-dim-item]:not(:hover) {
-  opacity: 0.62;
-  filter: blur(0.4px);
+  opacity: 0.55;
+  filter: blur(0.6px);
+  transform: scale(0.985);
 }
 [data-dim-item] {
   transition:
-    opacity 300ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 300ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 3D Interactive Card Tilt & Glass Specular Reflection */
+[data-tilt-card] {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 450ms cubic-bezier(0.1, 0.8, 0.2, 1), border-color 300ms ease, box-shadow 300ms ease;
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0px);
+}
+[data-tilt-card]:hover {
+  transition: transform 120ms cubic-bezier(0.1, 0.8, 0.2, 1);
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(10px);
+}
+[data-tilt-card]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  background: radial-gradient(
+    300px circle at var(--hx, 50%) var(--hy, 50%),
+    color-mix(in oklch, var(--fg) 7%, transparent) 0%,
+    transparent 80%
+  );
+}
+[data-tilt-card]:hover::after {
+  opacity: 1;
+}
+
+/* Card inner depth float */
+[data-tilt-depth] {
+  transform: translateZ(24px);
+  transform-style: preserve-3d;
 }
 
 /* Welcome-back rim: the last-opened project card glows for 3s on landing */

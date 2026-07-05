@@ -32,11 +32,10 @@ export function Contact() {
         <motion.div {...fadeUp} className="mb-14 max-w-3xl">
           <div className="eyebrow mb-3">06 / Contact</div>
           <h2 className="font-display text-4xl tracking-tight text-fg md:text-6xl">
-            Let's build something considered.
+            Let's build the future with AI.
           </h2>
           <p className="mt-6 text-lg text-fg-muted">
-            Open to senior IC roles, applied research collaborations, and thoughtful
-            product work. Reply time is usually under 48 hours.
+            Whether it’s an ambitious startup, an open-source project, cutting-edge research, or an engineering challenge, I’m always excited to collaborate with people building impactful technology. I usually reply within 24–48 hours.
           </p>
         </motion.div>
 
@@ -121,7 +120,7 @@ export function Contact() {
               className="group inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg transition-transform hover:-translate-y-0.5 disabled:opacity-60"
               disabled={sent}
             >
-              {sent ? "Opening your mail app…" : "Send message"}
+              {sent ? "Opening your mail app…" : "Start a Conversation"}
               <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
           </motion.form>

@@ -24,8 +24,8 @@ export function MagneticButton({
   const reduced = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 220, damping: 20, mass: 0.6 });
-  const sy = useSpring(y, { stiffness: 220, damping: 20, mass: 0.6 });
+  const sx = useSpring(x, { stiffness: 140, damping: 18, mass: 0.8 });
+  const sy = useSpring(y, { stiffness: 140, damping: 18, mass: 0.8 });
 
   const onMove = (e: React.PointerEvent) => {
     if (reduced || !ref.current) return;

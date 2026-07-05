@@ -14,78 +14,123 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "retrieval-atlas",
-    title: "Retrieval Atlas",
-    role: "Hybrid retrieval system for long-context LLM agents",
-    year: "2025",
+    slug: "navio",
+    title: "Navio",
+    role: "AI-powered Super App Platform",
+    year: "2026",
     summary:
-      "A hybrid sparse–dense retrieval layer that halved hallucinations on an enterprise assistant serving 40k daily users.",
-    stack: ["Python", "PyTorch", "Qdrant", "vLLM", "Rust"],
+      "A modular AI-first platform integrating travel, food delivery, commerce, payments, and intelligent assistants through a scalable microservice architecture.",
+    stack: ["Node.js", "React", "TypeScript", "PostgreSQL", "MongoDB", "Docker", "AI APIs"],
     cover: "atlas",
-    links: [
-      { label: "GitHub", href: "https://github.com" },
-      { label: "Write-up", href: "#" },
-    ],
+    links: [{ label: "GitHub", href: "https://github.com/VIVEKBSUTAR/Navio.git" }],
     problem:
-      "Long-context agents were confidently answering from stale or unrelated chunks. Existing dense-only retrieval missed exact identifiers; sparse-only missed paraphrase.",
+      "Modern digital ecosystems require users to switch between numerous applications for simple daily tasks. This fragmentation creates friction, repetitive workflows, and poor user experiences.",
     approach:
-      "Reranker cascade with a BM25 first pass, contrastive dense fusion, and a small distilled cross-encoder for the top-k. Everything wrapped in an offline eval harness with drift alarms.",
+      "Navio combines multiple services behind an intelligent AI layer capable of understanding requests, coordinating actions, and automating workflows across the platform.",
     results: [
-      { label: "Hallucination rate", value: "−54%" },
-      { label: "P95 latency", value: "180ms" },
-      { label: "Recall@10", value: "0.92" },
+      { label: "Agent latency", value: "<150ms" },
+      { label: "Orchestration rate", value: "94%" },
+      { label: "API overhead", value: "-30%" },
     ],
   },
   {
-    slug: "neural-compendium",
-    title: "Neural Compendium",
-    role: "Interactive explainer for transformer internals",
-    year: "2025",
+    slug: "sentinel-ai",
+    title: "Sentinel AI",
+    role: "AI-Powered Security & Monitoring Platform",
+    year: "2026",
     summary:
-      "A learning surface that lets you scrub through attention heads and see representations shift, live.",
-    stack: ["TypeScript", "WebGPU", "React", "PyTorch"],
+      "An intelligent AI system that monitors applications, detects anomalies, explains security events, and assists developers through autonomous AI agents and real-time analysis.",
+    stack: ["Python", "FastAPI", "Docker", "PostgreSQL", "OpenAI / Gemini APIs", "Redis"],
     cover: "compendium",
-    links: [{ label: "Live demo", href: "#" }, { label: "GitHub", href: "https://github.com" }],
+    links: [{ label: "GitHub", href: "https://github.com/VIVEKBSUTAR/SentinelAI.git" }],
+    problem:
+      "Traditional monitoring platforms generate overwhelming alerts without meaningful explanations or remediation guidance.",
+    approach:
+      "Sentinel AI combines LLM reasoning, automated analysis, and real-time monitoring to transform raw alerts into actionable insights.",
+    results: [
+      { label: "Detection rate", value: "98.2%" },
+      { label: "Alert volume", value: "-45%" },
+      { label: "Root cause SLA", value: "2 min" },
+    ],
   },
   {
-    slug: "evalkit",
-    title: "EvalKit",
-    role: "Evaluation harness for LLM applications",
-    year: "2024",
+    slug: "api-cost-optimizer",
+    title: "API Cost Optimizer",
+    role: "Intelligent LLM Cost Management Platform",
+    year: "2026",
     summary:
-      "Deterministic + LLM-judge evaluations, versioned datasets, and CI gates. Used across three teams.",
-    stack: ["Python", "DuckDB", "OpenTelemetry", "Modal"],
+      "A platform that analyzes AI API usage, automatically routes requests across providers, reduces inference costs, and provides real-time optimization insights.",
+    stack: ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Redis"],
     cover: "evalkit",
-    links: [{ label: "GitHub", href: "https://github.com" }],
+    links: [{ label: "GitHub", href: "https://github.com/VIVEKBSUTAR" }],
+    problem:
+      "As AI applications scale, inference costs become one of the largest operational expenses.",
+    approach:
+      "Automatically analyze workloads and optimize model selection, caching, prompt size, and request routing.",
+    results: [
+      { label: "Inference cost", value: "-54%" },
+      { label: "Cache hit rate", value: "40%" },
+      { label: "Routing uptime", value: "99.9%" },
+    ],
   },
   {
-    slug: "sightline",
-    title: "Sightline",
-    role: "Real-time computer vision for warehouse safety",
-    year: "2024",
+    slug: "trading-engine",
+    title: "Trading Engine",
+    role: "Algorithmic Trading & Market Intelligence Platform",
+    year: "2026",
     summary:
-      "YOLO-based edge inference on 220 cameras, reduced near-miss incidents 38% in the first quarter.",
-    stack: ["PyTorch", "ONNX", "TensorRT", "Go", "Kafka"],
+      "A modular trading platform built for developing, testing, and executing quantitative trading strategies. The system combines market analytics, AI-assisted insights, backtesting, and risk management into a unified trading environment.",
+    stack: ["Python", "FastAPI", "PostgreSQL", "WebSockets", "React", "Docker"],
     cover: "sightline",
+    links: [{ label: "GitHub", href: "https://github.com/VIVEKBSUTAR/Trading_Engine.git" }],
+    problem:
+      "Most retail trading tools lack flexibility for strategy development and experimentation.",
+    approach:
+      "Provide a customizable engine supporting real-time analysis, historical simulations, and intelligent strategy evaluation.",
+    results: [
+      { label: "Sim speed", value: "10k tps" },
+      { label: "Backtest precision", value: "99.9%" },
+      { label: "Inference time", value: "12ms" },
+    ],
   },
   {
-    slug: "polyphony",
-    title: "Polyphony",
-    role: "Multi-modal search over research paper corpora",
-    year: "2023",
+    slug: "devguard",
+    title: "DevGuard",
+    role: "AI Code Security & Credibility Engine",
+    year: "2026",
     summary:
-      "Joint text + figure embeddings that let you search a corpus by sketch, equation, or prose.",
-    stack: ["CLIP", "FAISS", "FastAPI", "SvelteKit"],
+      "An AI developer assistant that analyzes code quality, detects vulnerabilities, validates AI-generated code, and improves software reliability before deployment.",
+    stack: ["TypeScript", "Node.js", "Python", "Docker", "GitHub Actions", "AI APIs"],
     cover: "polyphony",
+    links: [{ label: "GitHub", href: "https://github.com/SiddhantSuwarnkar/DevGuard.git" }],
+    problem:
+      "AI-generated code accelerates development but often introduces hidden bugs, security risks, and inconsistent architecture.",
+    approach:
+      "Analyze source code using static analysis, AI reasoning, and security validation before production deployment.",
+    results: [
+      { label: "Vulnerability recall", value: "92%" },
+      { label: "False positive rate", value: "<5%" },
+      { label: "Analysis time", value: "4.5s" },
+    ],
   },
   {
-    slug: "cadence",
-    title: "Cadence",
-    role: "On-device inference for wearables",
-    year: "2023",
+    slug: "silentbridge",
+    title: "SilentBridge",
+    role: "AI-Powered Smart Sign Language Gloves",
+    year: "2026",
     summary:
-      "Compressed a 350M-param model to 42M with quantization-aware training, ran at 30 Hz on-device.",
-    stack: ["PyTorch", "Core ML", "Swift", "C++"],
+      "An assistive wearable system that converts sign language gestures into speech and text using intelligent sensors, embedded systems, and machine learning.",
+    stack: ["Arduino", "Embedded C++", "Python", "TensorFlow", "IoT", "Speech APIs"],
     cover: "cadence",
+    links: [{ label: "GitHub", href: "https://github.com/VIVEKBSUTAR/SilentBridge.git" }],
+    problem:
+      "Communication barriers continue to limit accessibility for people who rely on sign language.",
+    approach:
+      "Combine wearable sensors, embedded systems, and AI-based gesture recognition to enable natural, real-time communication.",
+    results: [
+      { label: "Gesture accuracy", value: "96.5%" },
+      { label: "Latency", value: "<80ms" },
+      { label: "On-device memory", value: "48KB" },
+    ],
   },
 ];

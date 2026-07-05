@@ -13,11 +13,12 @@ export function Skills() {
     { type: "skill"; name: string } | { type: "project"; slug: string } | null
   >(null);
 
-  const size = 640;
-  const cx = size / 2;
-  const cy = size / 2;
-  const rSkills = 280;
-  const rProjects = 130;
+  const width = 800;
+  const height = 640;
+  const cx = width / 2;
+  const cy = height / 2;
+  const rSkills = 230;
+  const rProjects = 100;
 
   const skillPos = useMemo(
     () =>
@@ -74,8 +75,8 @@ export function Skills() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px] lg:items-center">
-          <motion.div {...fadeUp} className="relative aspect-square w-full max-w-[640px] mx-auto">
-            <svg viewBox={`0 0 ${size} ${size}`} className="h-full w-full">
+          <motion.div {...fadeUp} className="relative aspect-[800/640] w-full max-w-[800px] mx-auto">
+            <svg viewBox={`0 0 ${width} ${height}`} className="h-full w-full">
               {/* rings */}
               <circle cx={cx} cy={cy} r={rSkills} fill="none" stroke="var(--border-hairline)" strokeDasharray="2 4" />
               <circle cx={cx} cy={cy} r={rProjects} fill="none" stroke="var(--border-hairline)" strokeDasharray="2 4" />

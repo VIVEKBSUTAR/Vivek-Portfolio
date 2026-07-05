@@ -61,19 +61,38 @@ export function Projects() {
               <Link
                 to="/work/$slug"
                 params={{ slug: p.slug }}
+                viewTransition
                 data-hover-light
+                data-tilt-card
                 data-dim-item
                 data-last-project={lastSlug === p.slug ? "" : undefined}
                 onPointerMove={(e) => {
                   const r = e.currentTarget.getBoundingClientRect();
+                  const x = (e.clientX - r.left) / r.width;
+                  const y = (e.clientY - r.top) / r.height;
+                  const rx = (y - 0.5) * -12;
+                  const ry = (x - 0.5) * 12;
+                  
+                  e.currentTarget.style.setProperty("--rx", `${rx}deg`);
+                  e.currentTarget.style.setProperty("--ry", `${ry}deg`);
                   e.currentTarget.style.setProperty("--hx", `${e.clientX - r.left}px`);
                   e.currentTarget.style.setProperty("--hy", `${e.clientY - r.top}px`);
+                }}
+                onPointerLeave={(e) => {
+                  e.currentTarget.style.setProperty("--rx", "0deg");
+                  e.currentTarget.style.setProperty("--ry", "0deg");
+                }}
+                style={{
+                  viewTransitionName: `project-card-${p.slug}`,
                 }}
                 className="group relative block overflow-hidden rounded-2xl border border-border-hairline bg-surface transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 hover:border-accent/40 hover:shadow-elevated"
               >
                 <div
                   className="relative h-56 overflow-hidden md:h-72"
-                  style={{ background: covers[p.cover] ?? covers.atlas }}
+                  style={{
+                    background: covers[p.cover] ?? covers.atlas,
+                    viewTransitionName: `project-cover-${p.slug}`,
+                  }}
                 >
                   <div className="grain absolute inset-0" />
                   {/* Image-only scale: sits on the cover layer, clipped by parent */}
@@ -94,8 +113,13 @@ export function Projects() {
                     <ArrowUpRight className="h-5 w-5 text-white/80 transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1" />
                   </div>
                 </div>
-                <div className="relative z-[2] p-6">
-                  <h3 className="font-display text-2xl tracking-tight text-fg">
+                <div className="relative z-[2] p-6" data-tilt-depth>
+                  <h3
+                    className="font-display text-2xl tracking-tight text-fg"
+                    style={{
+                      viewTransitionName: `project-title-${p.slug}`,
+                    }}
+                  >
                     {p.title}
                   </h3>
                   <p className="mt-1 text-sm text-fg-subtle">{p.role}</p>

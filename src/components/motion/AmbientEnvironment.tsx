@@ -3,8 +3,13 @@
 //   1. Cursor-light: soft radial that lags the pointer (spring, no overshoot).
 //   2. Section tint: a slow color wash driven by whichever <section id="…"> is
 //      centered in the viewport. Tints the ambient wash only — no text recolor.
-//   3. Particulate: ~40 low-alpha motes drifting on CSS keyframes.
+//   3. Particulate: ~32 low-alpha motes drifting on CSS keyframes.
 // Everything is skipped when `prefers-reduced-motion` is set.
+//
+// Refined with Environmental Intelligence:
+//   - Tracks scroll velocity in real-time.
+//   - Rapid scrolling dynamically dampens background glows and particles.
+//   - Focused route reading modes ("focused") drop base opacity to 0.22 for quiet focus.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -12,7 +17,7 @@ import { useAmbientMode } from "@/hooks/useAmbientMode";
 
 type Tint = { hue: number; chroma: number; label: string };
 
-// Per-section signature tints (see plan §11). Neutrals only for hero.
+// Per-section signature tints. Neutrals only for hero.
 const SECTION_TINTS: Record<string, Tint> = {
   hero: { hue: 65, chroma: 0.115, label: "amber" },
   about: { hue: 70, chroma: 0.10, label: "amber-soft" },
@@ -34,6 +39,7 @@ export function AmbientEnvironment() {
   const rafRef = useRef<number | null>(null);
   const [tint, setTint] = useState<Tint>(DEFAULT_TINT);
   const [touch, setTouch] = useState(false);
+  const [scrollVelocity, setScrollVelocity] = useState(0);
 
   // Detect touch — cursor-light off entirely on touch devices.
   useEffect(() => {
@@ -44,7 +50,7 @@ export function AmbientEnvironment() {
   // Cursor-light: lerp toward mouse position at ~60% lag.
   useEffect(() => {
     if (reduced || touch) return;
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
       targetPos.current = {
         x: e.clientX / window.innerWidth,
         y: e.clientY / window.innerHeight,
@@ -53,8 +59,8 @@ export function AmbientEnvironment() {
     window.addEventListener("pointermove", onMove, { passive: true });
 
     const tick = () => {
-      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.08;
-      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.08;
+      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.07;
+      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.07;
       if (cursorRef.current) {
         cursorRef.current.style.setProperty("--cx", `${currentPos.current.x * 100}%`);
         cursorRef.current.style.setProperty("--cy", `${currentPos.current.y * 100}%`);
@@ -69,6 +75,33 @@ export function AmbientEnvironment() {
     };
   }, [reduced, touch]);
 
+  // Environmental Intelligence: track real-time scroll velocity to dampen ambient noise
+  useEffect(() => {
+    if (typeof window === "undefined" || reduced) return;
+    let lastScrollY = window.scrollY;
+    let lastTime = performance.now();
+    let frameId: number;
+
+    const checkVelocity = () => {
+      const now = performance.now();
+      const currentScrollY = window.scrollY;
+      const dy = Math.abs(currentScrollY - lastScrollY);
+      const dt = Math.max(1, now - lastTime);
+      const velocity = (dy / dt) * 1000; // px/second
+      
+      lastScrollY = currentScrollY;
+      lastTime = now;
+      
+      // Low-pass filter for smooth velocity transitions
+      setScrollVelocity((prev) => prev + (velocity - prev) * 0.15);
+      
+      frameId = requestAnimationFrame(checkVelocity);
+    };
+    
+    frameId = requestAnimationFrame(checkVelocity);
+    return () => cancelAnimationFrame(frameId);
+  }, [reduced]);
+
   // Section tint: watch which section id crosses viewport center.
   useEffect(() => {
     const ids = Object.keys(SECTION_TINTS);
@@ -79,7 +112,6 @@ export function AmbientEnvironment() {
 
     const io = new IntersectionObserver(
       (entries) => {
-        // Pick the entry with the largest intersection ratio.
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -96,6 +128,7 @@ export function AmbientEnvironment() {
   }, []);
 
   // Static particulate positions — memoized so React never re-lays them out.
+  // Drift timings are extended using prime numbers to avoid repeating cycles.
   const particles = useMemo(
     () =>
       Array.from({ length: 32 }, (_, i) => ({
@@ -103,17 +136,21 @@ export function AmbientEnvironment() {
         left: `${(i * 137.5) % 100}%`,
         top: `${(i * 91.7) % 100}%`,
         size: 1 + ((i * 13) % 3),
-        delay: `${(i % 12) * -1.8}s`,
-        duration: `${22 + ((i * 7) % 16)}s`,
-        opacity: 0.04 + ((i % 5) * 0.012),
+        delay: `${(i % 17) * -2.3}s`,
+        duration: `${30 + ((i * 11) % 23)}s`,
+        opacity: 0.03 + ((i % 5) * 0.009),
       })),
     []
   );
 
   const tintColor = `oklch(0.78 ${tint.chroma} ${tint.hue})`;
 
-  // Intensity multiplier per mode — the whole layer's opacity fades against it.
-  const intensity = mode === "resting" ? 0.15 : mode === "focused" ? 0.4 : 1;
+  // Calculate scrolling dampening factor (1.0 = static/calm, drops during rapid scroll)
+  const scrollDampener = Math.max(0.1, Math.min(1.0, 1.0 - (scrollVelocity - 100) / 1800));
+
+  // Intensity multiplier per mode — focused reading drops intensity to 0.22.
+  const baseIntensity = mode === "resting" ? 0.15 : mode === "focused" ? 0.22 : 0.85;
+  const finalIntensity = baseIntensity * scrollDampener;
 
   return (
     <div
@@ -123,20 +160,20 @@ export function AmbientEnvironment() {
       style={{
         // @ts-expect-error custom prop
         "--ambient-tint": tintColor,
-        opacity: intensity,
+        opacity: finalIntensity,
         transition:
-          "opacity 700ms cubic-bezier(0.65,0,0.35,1), background 900ms cubic-bezier(0.65,0,0.35,1)",
+          "opacity 800ms cubic-bezier(0.2, 0.8, 0.2, 1), background 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
       }}
     >
-      {/* Ambient key light — top-right, slow breathing, tinted by section */}
+      {/* Ambient key light — top-right, slow organic breathing */}
       <div
         className="absolute right-[-15%] top-[-10%] h-[75vh] w-[75vh] rounded-full"
         style={{
           background: `radial-gradient(closest-side, ${tintColor}, transparent 70%)`,
           opacity: 0.35,
           filter: "blur(40px)",
-          animation: reduced ? undefined : "drift 18s ease-in-out infinite",
-          transition: "background 900ms cubic-bezier(0.65,0,0.35,1)",
+          animation: reduced ? undefined : "drift 37s ease-in-out infinite",
+          transition: "background 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
         }}
       />
 
@@ -147,8 +184,8 @@ export function AmbientEnvironment() {
           background: `radial-gradient(closest-side, ${tintColor}, transparent 70%)`,
           opacity: 0.22,
           filter: "blur(50px)",
-          animation: reduced ? undefined : "drift-slow 26s ease-in-out infinite",
-          transition: "background 900ms cubic-bezier(0.65,0,0.35,1)",
+          animation: reduced ? undefined : "drift-slow 53s ease-in-out infinite",
+          transition: "background 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
         }}
       />
 
@@ -181,12 +218,11 @@ export function AmbientEnvironment() {
             background:
               "radial-gradient(60% 45% at 30% 70%, color-mix(in oklch, var(--fg) 4%, transparent), transparent 70%), radial-gradient(50% 40% at 75% 30%, color-mix(in oklch, var(--fg) 3%, transparent), transparent 70%)",
             filter: "blur(60px)",
-            animation: "drift-slow 22s ease-in-out infinite",
+            animation: "drift-slow 47s ease-in-out infinite",
             mixBlendMode: "screen",
           }}
         />
       )}
-
 
       {/* Cursor-light — soft radial that lags the pointer */}
       {!reduced && !touch && (
@@ -195,7 +231,7 @@ export function AmbientEnvironment() {
           className="absolute inset-0"
           style={{
             background: `radial-gradient(320px circle at var(--cx, 50%) var(--cy, 40%), color-mix(in oklch, ${tintColor} 9%, transparent), transparent 60%)`,
-            transition: "background 900ms cubic-bezier(0.65,0,0.35,1)",
+            transition: "background 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
           }}
         />
       )}

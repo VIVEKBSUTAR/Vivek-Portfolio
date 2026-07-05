@@ -28,7 +28,7 @@ export function TopBar() {
       <nav className="glass flex items-center justify-between rounded-full px-3 py-2 shadow-glass">
         <Link
           to="/"
-          className="ml-2 flex items-center gap-2 font-display text-sm font-semibold tracking-tight text-fg"
+          className="ml-2 flex items-center gap-2 font-display text-sm font-semibold tracking-tight text-fg active-compress"
         >
           <span className="grid h-6 w-6 place-items-center rounded-md bg-accent text-accent-fg font-bold text-[11px]">
             V
@@ -41,7 +41,7 @@ export function TopBar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="group relative rounded-full px-3 py-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
+                className="group relative rounded-full px-3 py-1.5 text-sm text-fg-muted transition-colors hover:text-fg active-compress"
               >
                 <span>{l.label}</span>
                 <span
@@ -57,7 +57,7 @@ export function TopBar() {
           <ThemeToggle />
           <a
             href="#contact"
-            className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg transition-transform hover:scale-[1.02]"
+            className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg transition-all hover:scale-[1.02] active-compress"
           >
             Contact
           </a>

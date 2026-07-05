@@ -6,16 +6,35 @@ export type SkillNode = {
 };
 
 export const skills: SkillNode[] = [
-  { name: "PyTorch", group: "modeling", projects: ["retrieval-atlas", "neural-compendium", "sightline", "cadence"] },
-  { name: "LLM systems", group: "modeling", projects: ["retrieval-atlas", "evalkit", "neural-compendium"] },
-  { name: "Retrieval / RAG", group: "modeling", projects: ["retrieval-atlas", "polyphony"] },
-  { name: "Computer vision", group: "modeling", projects: ["sightline", "polyphony"] },
-  { name: "Quantization", group: "modeling", projects: ["cadence"] },
-  { name: "Distributed inference", group: "systems", projects: ["retrieval-atlas", "sightline"] },
-  { name: "Rust / Go", group: "systems", projects: ["retrieval-atlas", "sightline"] },
-  { name: "Evaluation infra", group: "systems", projects: ["evalkit", "retrieval-atlas"] },
-  { name: "TypeScript / React", group: "product", projects: ["neural-compendium", "evalkit"] },
-  { name: "WebGPU", group: "product", projects: ["neural-compendium"] },
-  { name: "Applied research", group: "research", projects: ["retrieval-atlas", "cadence"] },
-  { name: "Paper writing", group: "research", projects: [] },
+  // AI Engineering (modeling)
+  { name: "Large Language Models", group: "modeling", projects: ["sentinel-ai", "api-cost-optimizer", "navio"] },
+  { name: "AI Agents", group: "modeling", projects: ["navio", "sentinel-ai"] },
+  { name: "Agentic Workflows", group: "modeling", projects: ["navio", "sentinel-ai"] },
+  { name: "Retrieval-Augmented Generation", group: "modeling", projects: ["sentinel-ai", "api-cost-optimizer"] },
+  { name: "Prompt Engineering", group: "modeling", projects: ["api-cost-optimizer", "sentinel-ai"] },
+  { name: "Model Evaluation", group: "modeling", projects: ["devguard", "sentinel-ai"] },
+  { name: "Vector Databases", group: "modeling", projects: ["navio", "api-cost-optimizer"] },
+
+  // Software Development (product)
+  { name: "Python", group: "product", projects: ["sentinel-ai", "api-cost-optimizer", "trading-engine", "devguard", "silentbridge"] },
+  { name: "Node.js", group: "product", projects: ["navio", "devguard"] },
+  { name: "TypeScript", group: "product", projects: ["navio", "devguard", "api-cost-optimizer"] },
+  { name: "React", group: "product", projects: ["navio", "api-cost-optimizer", "trading-engine"] },
+  { name: "Next.js", group: "product", projects: ["api-cost-optimizer"] },
+  { name: "FastAPI", group: "product", projects: ["sentinel-ai", "api-cost-optimizer", "trading-engine"] },
+
+  // Data & Infrastructure (systems)
+  { name: "PostgreSQL", group: "systems", projects: ["navio", "sentinel-ai", "api-cost-optimizer", "trading-engine"] },
+  { name: "MongoDB", group: "systems", projects: ["navio"] },
+  { name: "Redis", group: "systems", projects: ["sentinel-ai", "api-cost-optimizer"] },
+  { name: "Docker", group: "systems", projects: ["navio", "sentinel-ai", "trading-engine", "devguard"] },
+  { name: "Git", group: "systems", projects: ["navio", "sentinel-ai", "trading-engine", "devguard", "silentbridge"] },
+
+  // Engineering (research)
+  { name: "System Design", group: "research", projects: ["navio", "trading-engine", "devguard", "sentinel-ai"] },
+  { name: "Software Architecture", group: "research", projects: ["navio", "sentinel-ai", "devguard"] },
+  { name: "API Development", group: "research", projects: ["navio", "sentinel-ai", "api-cost-optimizer", "trading-engine"] },
+  { name: "Cloud Integrations", group: "research", projects: ["navio", "sentinel-ai"] },
+  { name: "AI Automation", group: "research", projects: ["navio", "sentinel-ai", "devguard"] },
+  { name: "Technical Research", group: "research", projects: ["silentbridge", "navio"] },
 ];
