@@ -24,7 +24,9 @@ export function Skills() {
     () =>
       skills.map((s, i) => {
         const t = (i / skills.length) * Math.PI * 2 - Math.PI / 2;
-        return { ...s, x: cx + Math.cos(t) * rSkills, y: cy + Math.sin(t) * rSkills };
+        const x = Number((cx + Math.cos(t) * rSkills).toFixed(4));
+        const y = Number((cy + Math.sin(t) * rSkills).toFixed(4));
+        return { ...s, x, y };
       }),
     []
   );
@@ -33,7 +35,9 @@ export function Skills() {
     () =>
       projects.map((p, i) => {
         const t = (i / projects.length) * Math.PI * 2 - Math.PI / 2;
-        return { ...p, x: cx + Math.cos(t) * rProjects, y: cy + Math.sin(t) * rProjects };
+        const x = Number((cx + Math.cos(t) * rProjects).toFixed(4));
+        const y = Number((cy + Math.sin(t) * rProjects).toFixed(4));
+        return { ...p, x, y };
       }),
     []
   );

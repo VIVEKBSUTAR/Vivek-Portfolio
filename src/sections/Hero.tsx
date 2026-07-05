@@ -1,11 +1,14 @@
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { profile } from "@/data/profile";
 import { HeroAtmosphere } from "@/components/HeroAtmosphere";
-import { HeroScene } from "@/components/3d/HeroScene";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { easeOutSoft } from "@/lib/motion";
+
+const LazyHeroScene = lazy(() =>
+  import("@/components/3d/HeroScene").then((m) => ({ default: m.HeroScene }))
+);
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,7 +36,11 @@ export function Hero() {
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-24"
     >
       <HeroAtmosphere />
-      {inView && <HeroScene />}
+      {inView && (
+        <Suspense fallback={null}>
+          <LazyHeroScene />
+        </Suspense>
+      )}
 
       <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 gap-16 px-6 md:grid-cols-[1.4fr_1fr] md:items-end">
         <div>

@@ -18,7 +18,7 @@ const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/resume.lazy').then((d) => d.Route))
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -28,12 +28,14 @@ const WorkSlugRoute = WorkSlugRouteImport.update({
   id: '/work/$slug',
   path: '/work/$slug',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/work.$slug.lazy').then((d) => d.Route))
 const ResearchSlugRoute = ResearchSlugRouteImport.update({
   id: '/research/$slug',
   path: '/research/$slug',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() =>
+  import('./routes/research.$slug.lazy').then((d) => d.Route),
+)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute

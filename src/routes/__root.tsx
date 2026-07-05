@@ -80,24 +80,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Vivek — AI & Machine Learning Engineer" },
+      { title: "Vivek Balwant Sutar — AI Engineer & Builder" },
       {
         name: "description",
         content:
-          "Portfolio of Vivek, an AI & Machine Learning engineer building production ML systems — from research prototype to shipped product.",
+          "Portfolio of Vivek Balwant Sutar, an AI Engineer & Builder building AI agents, developer tools, and intelligent products that automate real-world work.",
       },
-      { name: "author", content: "Vivek" },
-      { property: "og:title", content: "Vivek — AI & Machine Learning Engineer" },
+      { name: "author", content: "Vivek Balwant Sutar" },
+      { property: "og:title", content: "Vivek Balwant Sutar — AI Engineer & Builder" },
       {
         property: "og:description",
         content:
-          "Selected work, research, and writing on LLM systems, retrieval, and evaluation infrastructure.",
+          "Selected work, research, and engineering projects in AI agents, security automation, and quantitative trading systems.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#221d18" },
     ],
     links: [
+      { rel: "canonical", href: "https://vivekbalwantsutar.com" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -111,6 +112,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         children: `try{var t=localStorage.getItem('theme')||'dark';document.documentElement.classList.add(t);}catch(e){document.documentElement.classList.add('dark');}`,
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "Vivek Balwant Sutar",
+          "jobTitle": "AI Engineer & Builder",
+          "url": "https://vivekbalwantsutar.com",
+          "sameAs": [
+            "https://github.com/VIVEKBSUTAR",
+            "https://www.linkedin.com/in/vivekbalwantsutar/",
+            "https://x.com/VivekSu06805363"
+          ],
+          "description": "AI engineer passionate about building intelligent software, AI agents, and LLM-powered applications that solve real-world problems."
+        })
+      }
     ],
   }),
   shellComponent: RootShell,

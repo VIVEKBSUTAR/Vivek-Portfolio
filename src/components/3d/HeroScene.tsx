@@ -82,7 +82,7 @@ function Sculpture({ theme, scrollY }: { theme: "dark" | "light"; scrollY: numbe
     <group>
       {/* Outer physical glass sculpture */}
       <mesh ref={outerRef} castShadow receiveShadow>
-        <torusKnotGeometry args={[0.9, 0.28, 256, 32]} />
+        <torusKnotGeometry args={[0.9, 0.28, 128, 24]} />
         <MeshTransmissionMaterial
           backside
           backsideThickness={0.5}
@@ -105,7 +105,7 @@ function Sculpture({ theme, scrollY }: { theme: "dark" | "light"; scrollY: numbe
 
       {/* Inner chrome core sculpture */}
       <mesh ref={innerRef}>
-        <torusKnotGeometry args={[0.9, 0.12, 128, 16]} />
+        <torusKnotGeometry args={[0.9, 0.12, 64, 12]} />
         <meshPhysicalMaterial
           metalness={1.0}
           roughness={0.05}
@@ -127,6 +127,7 @@ function Sculpture({ theme, scrollY }: { theme: "dark" | "light"; scrollY: numbe
 export function HeroScene() {
   const [mounted, setMounted] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [visible, setVisible] = useState(true);
   const reduced = useReducedMotion();
   const { theme } = useTheme();
 
@@ -135,8 +136,16 @@ export function HeroScene() {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
+    const handleVisibility = () => {
+      setVisible(document.visibilityState === "visible");
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    document.addEventListener("visibilitychange", handleVisibility);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   if (!mounted || reduced) {
@@ -150,6 +159,7 @@ export function HeroScene() {
           camera={{ position: [0, 0, 4.0], fov: 45 }}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
           dpr={[1, 1.5]}
+          frameloop={visible ? "always" : "never"}
           style={{ width: "100%", height: "100%" }}
         >
           <Sculpture theme={theme} scrollY={scrollY} />
