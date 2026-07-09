@@ -11,7 +11,7 @@ export function Research() {
         <motion.div {...fadeUp} className="mb-16">
           <div className="eyebrow mb-3">03 / Research</div>
           <h2 className="font-display text-4xl tracking-tight text-fg md:text-5xl">
-            Notes from the workbench.
+            Engineering explorations behind the products.
           </h2>
         </motion.div>
 

@@ -4,56 +4,200 @@ export type ResearchEntry = {
   venue: string;
   year: string;
   abstract: string;
-  href?: string;
+  overview: string;
+  objectives: string[];
+  challenges: string[];
+  methodology: string;
+  technologies: string[];
+  learnings: string[];
+  improvements: string[];
 };
 
 export const research: ResearchEntry[] = [
   {
-    slug: "agent-architectures",
-    title: "AI Agent Architectures for Autonomous Software Systems",
-    venue: "Independent Research",
+    slug: "multi-agent-orchestration",
+    title: "Multi-Agent Orchestration for AI Super Apps",
+    venue: "Navio Research",
     year: "2026",
     abstract:
-      "Exploring how autonomous AI agents can plan, reason, use external tools, maintain long-term memory, and collaborate to solve complex real-world tasks. This research investigates multi-agent orchestration, context management, memory systems, and reliable agent execution for production environments.",
+      "Studied multi-agent architectures, conversational workflows, service orchestration, memory management, and modular AI systems for building a unified AI-powered super app capable of coordinating multiple real-world services through intelligent agents.",
+    overview:
+      "This investigation focused on defining a unified interface for agent-to-agent and agent-to-service communication. In a super app ecosystem like Navio, multiple specialized services (payments, food delivery, transport) must be coordinated. Instead of rigid hardcoded integrations, this exploration studied how autonomous agents could dynamically plan, select, and sequence API calls to fulfill complex multi-domain user intents.",
+    objectives: [
+      "Design a lightweight agent communication protocol that supports hierarchical task delegation.",
+      "Develop a shared-state memory engine to preserve user context across service boundaries.",
+      "Establish robust fallback logic when dynamic agent plans encounter API or network failures."
+    ],
+    challenges: [
+      "Context window dilution and memory decay when switching tasks between different domains (e.g., from food choice to payment verification).",
+      "Enforcing consistent JSON outputs from LLMs across varying prompt structures without adding substantial latency.",
+      "Preventing execution loops in multi-agent routing where agents repeatedly pass tasks back and forth."
+    ],
+    methodology:
+      "Created a centralized orchestrator agent acting as a router and supervisor, utilizing a Directed Acyclic Graph (DAG) parser to sequence child agent operations. Implemented a Redis-based transient memory store with short-term semantic summarization to condense history before passing it to subsequent agent contexts. Utilized structured output validation schemas (Zod) combined with prompt-engineered retry loops to guarantee valid API parameters.",
+    technologies: ["TypeScript", "Node.js", "Redis", "LangChain", "Zod", "OpenAI GPT-4o"],
+    learnings: [
+      "Hierarchical delegation performs significantly better than a flat peer-to-peer agent structure, reducing total tokens processed by 35%.",
+      "Dynamic execution graphs require deterministic guards; allowing agents absolute freedom to select APIs leads to high error rates."
+    ],
+    improvements: [
+      "Implement local small language models (SLMs) for low-latency routing decisions to bypass commercial API costs.",
+      "Integrate reinforcement learning from user feedback (RLHF) to optimize agent tool selection over time."
+    ]
   },
   {
-    slug: "self-healing-software",
-    title: "Self-Healing Software Systems",
-    venue: "Major Project Research",
+    slug: "infrastructure-monitoring",
+    title: "LLM-Powered Infrastructure Monitoring & Root Cause Analysis",
+    venue: "Sentinel AI Research",
     year: "2026",
     abstract:
-      "Investigating intelligent software capable of detecting failures, diagnosing root causes, and autonomously recovering without human intervention. The research combines AI agents, observability, system monitoring, anomaly detection, and automated remediation to improve reliability and reduce operational downtime.",
+      "Explored large language model reasoning for infrastructure monitoring, anomaly detection, intelligent log analysis, automated incident explanation, and AI-assisted debugging to improve developer productivity and system reliability.",
+    overview:
+      "DevOps engineers frequently face alert fatigue caused by thousands of low-level system notifications. This exploration analyzed the feasibility of using LLMs as semantic filters and incident analysts. The goal was to build a system that automatically groups logs, explains security or failure events in plain English, and suggests precise code-level remediation.",
+    objectives: [
+      "Implement real-time log ingestion and semantic anomaly detection.",
+      "Create a reliable pipeline for translating complex system stack traces into clear, developer-friendly incident summaries.",
+      "Design secure, read-only system context retrieval to supply agents with environment logs without exposing sensitive keys."
+    ],
+    challenges: [
+      "Processing high-throughput log streams without overwhelming API rate limits or incurring excessive costs.",
+      "Minimizing hallucination rates in root-cause diagnosis, where incorrect advice could lead to dangerous configuration edits.",
+      "Handling semi-structured and unstructured logs generated by varying application environments."
+    ],
+    methodology:
+      "Designed a hybrid monitoring pipeline: traditional heuristic filters group repetitive logs, and only anomalous patterns are forwarded to the LLM analyzer. Constructed a Retrieval-Augmented Generation (RAG) system targeting local repository code and historical runbooks to augment the model's diagnostic context. Implemented verification agents that dry-run proposed solutions against sandboxed configuration files.",
+    technologies: ["Python", "FastAPI", "OpenSearch", "RAG / Vector DB", "Docker", "LangGraph"],
+    learnings: [
+      "Pre-filtering log streams reduces the volume of tokens sent to the LLM by 90%, making real-time AI log analysis financially viable.",
+      "RAG context containing specific codebase versions drastically improves root-cause accuracy compared to generalized model weights."
+    ],
+    improvements: [
+      "Add auto-remediation execution gates to allow trusted agents to automatically apply hotfixes in non-production environments.",
+      "Support multi-modal monitoring to ingest and analyze visual system health graphs and dashboards."
+    ]
   },
   {
-    slug: "graph-intelligence",
-    title: "Graph Intelligence for Urban Route Resilience",
-    venue: "ISRO Hackathon Research",
+    slug: "cost-efficient-inference",
+    title: "Cost-Efficient AI Inference & Model Routing",
+    venue: "API Cost Optimizer Research",
     year: "2026",
     abstract:
-      "Research focused on analyzing transportation networks using graph algorithms and network science to identify critical infrastructure nodes and improve urban resilience. The work explores concepts such as betweenness centrality, route optimization, failure simulation, and AI-assisted infrastructure planning to support resilient smart city transportation systems.",
+      "Investigated intelligent model selection, API routing strategies, token optimization, latency-aware request routing, response quality evaluation, and cost-aware inference across multiple commercial LLM providers.",
+    overview:
+      "Commercial LLM API costs scale rapidly in production. This technical exploration examined dynamic model routing, semantic caching, and response validation. By evaluating query complexity in real time, the routing layer shifts simple tasks (classification, basic parsing) to cheaper models (GPT-4o-mini, Claude Haiku) while reserving expensive frontier models for reasoning-heavy workloads.",
+    objectives: [
+      "Build an ultra-low latency routing middleware that evaluates query complexity under 15ms.",
+      "Design a semantic cache layer that identifies conceptually identical queries to bypass model inference altogether.",
+      "Construct an automated evaluation framework to continuously monitor response quality across different routed models."
+    ],
+    challenges: [
+      "Measuring query complexity accurately without utilizing expensive model calls.",
+      "Mitigating latency overhead added by the cache lookup and routing calculations.",
+      "Managing inconsistent API formats, rate limits, and latency spikes across multiple third-party providers."
+    ],
+    methodology:
+      "Developed a lightweight TF-IDF classifier and length analyzer to measure intent complexity before routing. Implemented a semantic caching gateway using Redis and Cosine Similarity on query embedding vectors. Constructed a fallback system that automatically retries failed requests with alternative providers or models.",
+    technologies: ["Python", "Redis", "SentenceTransformers", "FastAPI", "LiteLLM", "PostgreSQL"],
+    learnings: [
+      "Over 45% of user queries in typical conversational interfaces are highly repetitive and can be resolved via semantic cache, saving 100% of LLM costs for those hits.",
+      "Smart routing drops overall inference costs by 54% while maintaining quality scores above 95% compared to single-frontier-model setups."
+    ],
+    improvements: [
+      "Train a custom distilled classification model to handle multi-step complexity predictions.",
+      "Incorporate historical model latency windows dynamically into routing decisions to minimize request timeouts."
+    ]
   },
   {
-    slug: "llm-cost-optimization",
-    title: "AI Infrastructure & LLM Cost Optimization",
-    venue: "Independent Research",
+    slug: "quantitative-trading",
+    title: "AI-Assisted Quantitative Trading Systems",
+    venue: "Trading Engine Research",
     year: "2026",
     abstract:
-      "Exploring techniques to reduce the operational cost of deploying large language models without compromising response quality. Research areas include intelligent model routing, prompt optimization, semantic caching, token efficiency, provider selection, and adaptive inference strategies across multiple AI platforms.",
+      "Researched algorithmic trading workflows, market data processing, strategy backtesting, portfolio evaluation, risk management, and AI-assisted decision support for quantitative trading systems.",
+    overview:
+      "This investigation explored how AI agents and historical market analysis can assist in strategy development, parameter optimization, and risk evaluation. Rather than relying on black-box model predictions, the project focused on using LLMs to translate natural language trading ideas into backtestable code and parsing execution metrics to identify risks.",
+    objectives: [
+      "Develop a modular backtesting framework capable of executing strategy simulations over multi-year datasets.",
+      "Implement a semantic translator that generates executable Python code from plain-text trading strategy ideas.",
+      "Design risk validation boundaries to prevent strategies from executing trades during extreme volatility."
+    ],
+    challenges: [
+      "Processing high-throughput historical bar and tick data efficiently in Python.",
+      "Ensuring that AI-generated strategy code is secure, syntactically correct, and free from infinite execution loops.",
+      "Aligning historical backtesting results with real-world execution factors like slippage and transaction costs."
+    ],
+    methodology:
+      "Built a high-performance event-driven backtesting engine utilizing Pandas and NumPy for vector calculations. Implemented a strict AST (Abstract Syntax Tree) validator to sandbox and verify AI-generated python strategies before compilation. Used WebSockets to ingest real-time market data, providing live performance feeds to the user dashboard.",
+    technologies: ["Python", "Pandas", "NumPy", "WebSockets", "FastAPI", "Docker"],
+    learnings: [
+      "Event-driven architectures prevent lookahead bias (accidental use of future data) during historical simulations.",
+      "AI-assisted strategy design accelerates the ideation-to-testing cycle from hours to less than a minute, though human supervision of code boundaries is vital."
+    ],
+    improvements: [
+      "Port core simulation calculations to Rust or C++ to support tick-by-tick backtesting over decade-long datasets.",
+      "Incorporate alternative datasets (e.g. sentiment data, financial news) into the strategy optimization RAG system."
+    ]
   },
   {
-    slug: "wearable-ai-accessibility",
-    title: "Intelligent Accessibility through Wearable AI",
-    venue: "Embedded AI Research",
+    slug: "trustworthy-ai",
+    title: "Trustworthy AI for Secure Software Development",
+    venue: "DevGuard Research",
     year: "2025",
     abstract:
-      "Researching wearable systems that translate sign language into natural speech and text using sensor fusion, embedded hardware, and machine learning. The work investigates gesture recognition, real-time inference, embedded optimization, and human-centered design for assistive technologies.",
+      "Explored AI-assisted code review, vulnerability detection, code credibility evaluation, secure software engineering practices, and automated developer guidance before deployment.",
+    overview:
+      "With the proliferation of AI coding assistants, codebases are expanding rapidly, but security risks (SQL injection, hardcoded secrets, dependency vulnerabilities) are also rising. This research studied how AI analysis pipelines can be integrated into the developer workflow to validate code quality, detect vulnerability patterns, and evaluate AI-generated code before it reaches the main repository.",
+    objectives: [
+      "Design an automated pipeline to scan pull requests for common OWASP security vulnerabilities.",
+      "Implement a semantic code credibility evaluation system that rates how trustworthy a code block is based on comments, complexity, and dependencies.",
+      "Create a pre-commit hook that provides contextual security recommendations directly in the terminal."
+    ],
+    challenges: [
+      "Balancing static analysis rules with the semantic understanding of LLMs to reduce false positive alerts.",
+      "Minimizing scan time to keep PR reviews under 10 seconds, maintaining developer velocity.",
+      "Ensuring that sensitive proprietary code analyzed by the security engine is not stored or used for model training."
+    ],
+    methodology:
+      "Integrated traditional AST-based analyzers (e.g., Bandit, ESLint) to catch syntax-level issues quickly, forwarding complex files to LLM security analysts. Formulated structured prompt templates with few-shot vulnerability examples to guide model reviews. Designed a secure context sanitizer that strips personal data, secrets, and proprietary names before sending code segments to external APIs.",
+    technologies: ["TypeScript", "Node.js", "Python", "AST Parsers", "Docker", "GitHub Actions"],
+    learnings: [
+      "Combining static analyzers with LLM verification reduces false-positive rates by over 40% compared to using either approach alone.",
+      "Developers are 3x more likely to fix security issues when recommendations include a code diff suggestion rather than just a description."
+    ],
+    improvements: [
+      "Add support for fine-tuned local models to process code completely offline, ensuring absolute confidentiality.",
+      "Implement deep dependency tree analysis to detect supply chain vulnerability vectors (e.g., typo-squatting or compromised packages)."
+    ]
   },
   {
-    slug: "ai-developer-tools",
-    title: "AI Developer Tools & Intelligent Software Engineering",
-    venue: "Personal Research",
+    slug: "embedded-ai-accessibility",
+    title: "Embedded AI for Intelligent Accessibility",
+    venue: "SilentBridge Research",
     year: "2025",
     abstract:
-      "Exploring how AI can enhance the software development lifecycle through intelligent code analysis, automated debugging, security validation, documentation generation, and autonomous development assistants. Current investigations include AI code credibility analysis, developer copilots, autonomous debugging workflows, and software quality evaluation systems.",
-  },
+      "Investigated wearable sensing, gesture recognition, embedded machine learning, sensor fusion, and real-time sign language translation for accessibility-focused AI systems.",
+    overview:
+      "This exploration investigated the interface between physical sensors and embedded machine learning models. By collecting real-time flex sensor data from glove inputs, the research focused on optimizing feature extraction and model compilation to run sign language translation algorithms on low-power microcontrollers (e.g., ESP32) with minimal latency and high accuracy.",
+    objectives: [
+      "Implement real-time sensor fusion algorithms (complementary filter) to merge inertial and flex sensor streams.",
+      "Design a lightweight gesture classification model with a memory footprint under 40KB.",
+      "Optimize real-time inference loop latency to remain below 100ms for natural conversation."
+    ],
+    challenges: [
+      "Drastic memory constraints when deploying deep learning models to microcontrollers with limited SRAM.",
+      "Managing sensor drift and calibration differences between individual users' hand sizes and movement patterns.",
+      "Translating continuous stream sequences into discrete word blocks without complex, heavy natural language processing models."
+    ],
+    methodology:
+      "Acquired hand gesture raw data through analog inputs, applied Kalman and moving-average filters to clean high-frequency noise. Developed and trained a small recurrent neural network (LSTM/GRU) and compiled it into C++ arrays using TensorFlow Lite for Microcontrollers. Designed a state-machine gesture parser to trigger speech generation APIs once a gesture sequence stabilizes.",
+    technologies: ["Arduino / ESP32", "Embedded C++", "TensorFlow Lite Micro", "Python", "Sensor Fusion"],
+    learnings: [
+      "Quantizing model weights from float32 to int8 reduces memory consumption by 4x with less than a 1.5% drop in gesture classification accuracy.",
+      "Real-time calibration routines at boot are essential to correct sensor drift caused by physical glove positioning shifts."
+    ],
+    improvements: [
+      "Integrate low-power Bluetooth (BLE) to transmit sign translations directly to audio-enabled smart devices.",
+      "Develop a semi-supervised learning loop allowing users to record and train custom gestures directly on the device."
+    ]
+  }
 ];
