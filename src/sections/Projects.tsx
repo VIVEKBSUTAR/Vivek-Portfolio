@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import { fadeUp } from "@/lib/motion";
 import { readMemory, MEMORY_KEYS } from "@/lib/memory";
+import { ProjectBlueprint } from "@/components/ui/ProjectBlueprint";
 
 const covers: Record<string, string> = {
   atlas: "linear-gradient(140deg, oklch(0.32 0.06 60), oklch(0.22 0.02 60) 55%, oklch(0.5 0.14 55) 130%)",
@@ -88,7 +89,7 @@ export function Projects() {
                 className="group relative block overflow-hidden rounded-2xl border border-border-hairline bg-surface transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 hover:border-accent/40 hover:shadow-elevated"
               >
                 <div
-                  className="relative h-56 overflow-hidden md:h-72"
+                  className="relative h-56 overflow-hidden md:h-72 blueprint-grid"
                   style={{
                     background: covers[p.cover] ?? covers.atlas,
                     viewTransitionName: `project-cover-${p.slug}`,
@@ -100,6 +101,10 @@ export function Projects() {
                     className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                     style={{ background: covers[p.cover] ?? covers.atlas }}
                   />
+                  
+                  {/* Render the Project Blueprint SVG */}
+                  <ProjectBlueprint slug={p.slug} />
+                  
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   <div className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-black/25 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80 backdrop-blur">
                     {p.year}
