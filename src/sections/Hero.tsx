@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { Link } from "@tanstack/react-router";
 import { profile } from "@/data/profile";
 import { HeroAtmosphere } from "@/components/HeroAtmosphere";
 import { MagneticButton } from "@/components/motion/MagneticButton";
@@ -97,13 +98,13 @@ export function Hero() {
                 </span>
               </a>
             </MagneticButton>
-            <a
-              href="/resume"
+            <Link
+              to="/resume"
               className="inline-flex items-center gap-2 rounded-full border border-border-hairline px-5 py-3 text-sm text-fg transition-colors hover:bg-surface"
             >
               Resume
               <ArrowUpRight className="h-4 w-4" />
-            </a>
+            </Link>
           </motion.div>
         </div>
 

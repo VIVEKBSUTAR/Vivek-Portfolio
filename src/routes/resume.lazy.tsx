@@ -16,12 +16,21 @@ function Resume() {
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-full border border-border-hairline px-4 py-2 text-sm text-fg hover:border-accent/40"
-          >
-            <Download className="h-4 w-4" /> Print / save PDF
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-full border border-border-hairline px-4 py-2 text-sm text-fg-muted hover:text-fg hover:border-accent/40 transition-colors"
+            >
+              Print Page
+            </button>
+            <a
+              href="/Vivek_Sutar_Resume.pdf"
+              download="Vivek_Sutar_Resume.pdf"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:bg-accent/90 transition-colors"
+            >
+              <Download className="h-4 w-4" /> Download PDF
+            </a>
+          </div>
         </div>
 
         <header className="mt-12 border-b border-border-hairline pb-8">
