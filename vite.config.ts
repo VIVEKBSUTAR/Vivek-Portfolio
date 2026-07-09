@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  base: "/Vivek-Portfolio/",
   plugins: [
     TanStackRouterVite(),
     react(),
