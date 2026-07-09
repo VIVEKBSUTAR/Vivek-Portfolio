@@ -4,12 +4,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  HeadContent,
-  Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
-
-import appCss from "../styles.css?url";
+import { useEffect } from "react";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -76,79 +72,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Vivek Balwant Sutar — AI Engineer & Builder" },
-      {
-        name: "description",
-        content:
-          "Portfolio of Vivek Balwant Sutar, an AI Engineer & Builder building AI agents, developer tools, and intelligent products that automate real-world work.",
-      },
-      { name: "author", content: "Vivek Balwant Sutar" },
-      { property: "og:title", content: "Vivek Balwant Sutar — AI Engineer & Builder" },
-      {
-        property: "og:description",
-        content:
-          "Selected work, research, and engineering projects in AI agents, security automation, and quantitative trading systems.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#221d18" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://vivekbalwantsutar.com" },
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
-      },
-    ],
-    scripts: [
-      {
-        children: `try{var t=localStorage.getItem('theme')||'dark';document.documentElement.classList.add(t);}catch(e){document.documentElement.classList.add('dark');}`,
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "Vivek Balwant Sutar",
-          "jobTitle": "AI Engineer & Builder",
-          "url": "https://vivekbalwantsutar.com",
-          "sameAs": [
-            "https://github.com/VIVEKBSUTAR",
-            "https://www.linkedin.com/in/vivekbalwantsutar/",
-            "https://x.com/VivekSu06805363"
-          ],
-          "description": "AI engineer passionate about building intelligent software, AI agents, and LLM-powered applications that solve real-world problems."
-        })
-      }
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
