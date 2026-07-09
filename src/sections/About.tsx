@@ -13,24 +13,17 @@ export function About() {
         </div>
 
         <div className="grid grid-cols-1 gap-16 md:grid-cols-[1fr_1.2fr]">
-          {/* Portrait treatment (placeholder — swap for real photo) */}
+          {/* Portrait treatment */}
           <motion.div {...fadeUp} className="relative">
-            <div
-              className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl border border-border-hairline grain"
-              style={{
-                background:
-                  "linear-gradient(160deg, oklch(0.28 0.02 60), oklch(0.18 0.01 60) 60%, oklch(0.35 0.06 55) 120%)",
-              }}
-            >
-              <div
-                className="absolute inset-0 opacity-70"
-                style={{
-                  background:
-                    "radial-gradient(80% 60% at 30% 20%, oklch(0.78 0.13 65 / 0.35), transparent 70%)",
-                }}
+            <div className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl border border-border-hairline shadow-glass group/portrait">
+              <img
+                src="/vivek.jpg"
+                alt="Vivek Balwant Sutar Portrait"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/portrait:scale-105"
               />
-              <div className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-widest text-fg-subtle">
-                portrait · placeholder
+              <div className="absolute inset-0 bg-gradient-to-t from-bg/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-widest text-fg-subtle select-none">
+                Vivek Balwant Sutar
               </div>
             </div>
           </motion.div>
