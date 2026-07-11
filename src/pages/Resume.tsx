@@ -1,14 +1,10 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Download } from "lucide-react";
 import { profile } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { skills } from "@/data/skills";
 
-export const Route = createLazyFileRoute("/resume")({
-  component: Resume,
-});
-
-function Resume() {
+export function Resume() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <div className="mx-auto max-w-3xl px-6 pt-16 pb-24">

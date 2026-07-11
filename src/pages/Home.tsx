@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { TopBar } from "@/components/nav/TopBar";
 import { SectionIndicators } from "@/components/nav/SectionIndicators";
 import { Footer } from "@/components/nav/Footer";
@@ -11,11 +10,7 @@ import { Skills } from "@/sections/Skills";
 import { Experience } from "@/sections/Experience";
 import { Contact } from "@/sections/Contact";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-function Index() {
+export function Home() {
   return (
     <div className="relative min-h-screen bg-bg text-fg">
       <AmbientEnvironment />

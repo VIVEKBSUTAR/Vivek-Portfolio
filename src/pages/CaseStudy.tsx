@@ -1,16 +1,14 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, lazy, Suspense } from "react";
-import { projects, type Project } from "@/data/projects";
+import { projects } from "@/data/projects";
 import { TopBar } from "@/components/nav/TopBar";
 import { Footer } from "@/components/nav/Footer";
 import { AmbientEnvironment } from "@/components/motion/AmbientEnvironment";
 import { writeMemory, MEMORY_KEYS } from "@/lib/memory";
 
-const LazyProjectBlueprint = lazy(() =>
-  import("@/components/ui/ProjectBlueprint").then((m) => ({ default: m.ProjectBlueprint }))
-);
+import { ProjectBlueprint } from "@/components/ui/ProjectBlueprint";
 
 const covers: Record<string, string> = {
   atlas: "linear-gradient(140deg, oklch(0.32 0.06 60), oklch(0.22 0.02 60) 55%, oklch(0.5 0.14 55) 130%)",
@@ -20,10 +18,6 @@ const covers: Record<string, string> = {
   polyphony: "linear-gradient(140deg, oklch(0.28 0.04 290), oklch(0.2 0.02 60) 55%, oklch(0.6 0.12 55) 130%)",
   cadence: "linear-gradient(140deg, oklch(0.3 0.05 180), oklch(0.2 0.02 60) 55%, oklch(0.6 0.13 55) 130%)",
 };
-
-export const Route = createLazyFileRoute("/work/$slug")({
-  component: CaseView,
-});
 
 const parentVariants = {
   hidden: { opacity: 0 },
@@ -55,14 +49,30 @@ const metricCardVariants = {
   },
 };
 
-function CaseView() {
-  const { project } = Route.useLoaderData() as { project: Project };
-  const idx = projects.findIndex((p) => p.slug === project.slug);
-  const next = projects[(idx + 1) % projects.length];
+export function CaseStudy() {
+  const { slug } = useParams<{ slug: string }>();
+  const project = projects.find((p) => p.slug === slug);
 
   useEffect(() => {
-    writeMemory(MEMORY_KEYS.lastProject, { slug: project.slug, ts: Date.now() });
-  }, [project.slug]);
+    if (project) {
+      writeMemory(MEMORY_KEYS.lastProject, { slug: project.slug, ts: Date.now() });
+    }
+  }, [project]);
+
+  if (!project) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-bg text-fg">
+        <div className="text-center">
+          <div className="eyebrow mb-4">Not found</div>
+          <h1 className="font-display text-3xl">This project doesn't exist.</h1>
+          <Link to="/#work" className="mt-6 inline-block text-accent underline">Back home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const idx = projects.findIndex((p) => p.slug === project.slug);
+  const next = projects[(idx + 1) % projects.length];
 
   return (
     <div className="relative min-h-screen bg-bg text-fg">
@@ -79,9 +89,7 @@ function CaseView() {
       >
         <motion.div variants={childVariants}>
           <Link
-            to="/"
-            hash="work"
-            viewTransition
+            to="/#work"
             className="inline-flex items-center gap-2 text-sm text-fg-muted transition-colors hover:text-fg"
           >
             <ArrowLeft className="h-4 w-4" /> Back to work
@@ -113,9 +121,7 @@ function CaseView() {
             viewTransitionName: `project-cover-${project.slug}`,
           }}
         >
-          <Suspense fallback={<div className="absolute inset-0 w-full h-full bg-border-hairline/5" />}>
-            <LazyProjectBlueprint slug={project.slug} />
-          </Suspense>
+          <ProjectBlueprint slug={project.slug} />
         </motion.div>
 
         <motion.section variants={childVariants} className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-[180px_1fr]">
@@ -190,9 +196,7 @@ function CaseView() {
         <motion.div variants={childVariants} className="mt-24 border-t border-border-hairline pt-8">
           <div className="eyebrow mb-3">Next</div>
           <Link
-            to="/work/$slug"
-            params={{ slug: next.slug }}
-            viewTransition
+            to={`/work/${next.slug}`}
             className="group flex items-center justify-between active-compress"
           >
             <span className="font-display text-3xl tracking-tight text-fg transition-colors group-hover:text-accent">

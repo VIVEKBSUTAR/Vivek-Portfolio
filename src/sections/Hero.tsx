@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { profile } from "@/data/profile";
 import { HeroAtmosphere } from "@/components/HeroAtmosphere";
 import { MagneticButton } from "@/components/motion/MagneticButton";

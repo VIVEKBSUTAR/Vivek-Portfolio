@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { research } from "@/data/research";
 import { fadeUp } from "@/lib/motion";
@@ -27,8 +27,7 @@ export function Research() {
               className="group border-b border-border-hairline"
             >
               <Link
-                to="/research/$slug"
-                params={{ slug: r.slug }}
+                to={`/research/${r.slug}`}
                 data-hover-light
                 onPointerMove={(e) => {
                   const r = e.currentTarget.getBoundingClientRect();

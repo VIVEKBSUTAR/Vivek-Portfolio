@@ -4,7 +4,7 @@
 // cross-fade its intensity without JS keyframes.
 
 import { useEffect, useState } from "react";
-import { useRouterState } from "@tanstack/react-router";
+import { useLocation } from "react-router-dom";
 
 export type AmbientMode = "active" | "focused" | "resting";
 
@@ -16,7 +16,7 @@ const FOCUSED_ROUTE_PREFIXES = ["/work/", "/research/", "/resume"];
 
 export function useAmbientMode(): AmbientMode {
   const [mode, setMode] = useState<AmbientMode>("active");
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
 
   // Route-driven mode takes precedence.
   const routeForcedFocus = FOCUSED_ROUTE_PREFIXES.some((p) =>

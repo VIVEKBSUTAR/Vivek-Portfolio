@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import { fadeUp } from "@/lib/motion";
@@ -60,9 +60,7 @@ export function Projects() {
               className={i % 3 === 0 ? "md:col-span-2" : ""}
             >
               <Link
-                to="/work/$slug"
-                params={{ slug: p.slug }}
-                viewTransition
+                to={`/work/${p.slug}`}
                 data-hover-light
                 data-tilt-card
                 data-dim-item
