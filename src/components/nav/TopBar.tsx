@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
@@ -26,15 +25,15 @@ export function TopBar() {
       }`}
     >
       <nav className="glass flex items-center justify-between rounded-full px-3 py-2 shadow-glass">
-        <Link
-          to="/"
+        <a
+          href="#"
           className="ml-2 flex items-center gap-2 font-display text-sm font-semibold tracking-tight text-fg active-compress"
         >
           <span className="grid h-6 w-6 place-items-center rounded-md bg-accent text-accent-fg font-bold text-[11px]">
             V
           </span>
           <span className="hidden sm:inline">Vivek</span>
-        </Link>
+        </a>
 
         <ul className="hidden items-center gap-1 md:flex">
           {links.map((l) => (

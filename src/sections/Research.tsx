@@ -1,5 +1,4 @@
 import { motion } from "motion/react";
-import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { research } from "@/data/research";
 import { fadeUp } from "@/lib/motion";
@@ -26,8 +25,8 @@ export function Research() {
               data-dim-item
               className="group border-b border-border-hairline"
             >
-              <Link
-                to={`/research/${r.slug}`}
+              <a
+                href={`#research/${r.slug}`}
                 data-hover-light
                 onPointerMove={(e) => {
                   const r = e.currentTarget.getBoundingClientRect();
@@ -47,7 +46,7 @@ export function Research() {
                 </div>
                 <span className="relative z-[2] hidden text-sm text-fg-subtle md:block">{r.venue}</span>
                 <ArrowUpRight className="relative z-[2] h-4 w-4 text-fg-subtle transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
-              </Link>
+              </a>
             </motion.li>
           ))}
         </ul>

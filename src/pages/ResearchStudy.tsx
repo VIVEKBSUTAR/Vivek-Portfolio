@@ -1,4 +1,3 @@
-import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
 import { research } from "@/data/research";
@@ -26,8 +25,11 @@ const childVariants = {
   },
 };
 
-export function ResearchStudy() {
-  const { slug } = useParams<{ slug: string }>();
+interface ResearchStudyProps {
+  slug: string;
+}
+
+export function ResearchStudy({ slug }: ResearchStudyProps) {
   const entry = research.find((r) => r.slug === slug);
 
   if (!entry) {
@@ -36,7 +38,7 @@ export function ResearchStudy() {
         <div className="text-center">
           <div className="eyebrow mb-4">Not found</div>
           <h1 className="font-display text-3xl">This research entry doesn't exist.</h1>
-          <Link to="/#research" className="mt-6 inline-block text-accent underline">Back home</Link>
+          <a href="#research" className="mt-6 inline-block text-accent underline">Back home</a>
         </div>
       </div>
     );
@@ -53,12 +55,12 @@ export function ResearchStudy() {
         className="mx-auto max-w-4xl px-6 pt-32 pb-24"
       >
         <motion.div variants={childVariants}>
-          <Link
-            to="/#research"
+          <a
+            href="#research"
             className="inline-flex items-center gap-2 text-sm text-fg-muted transition-colors hover:text-fg"
           >
             <ArrowLeft className="h-4 w-4" /> Back to research
-          </Link>
+          </a>
         </motion.div>
 
         <motion.header variants={childVariants} className="mt-10 border-b border-border-hairline pb-10">

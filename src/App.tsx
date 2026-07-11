@@ -1,65 +1,54 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Home } from "./pages/Home";
 import { CaseStudy } from "./pages/CaseStudy";
 import { ResearchStudy } from "./pages/ResearchStudy";
 import { Resume } from "./pages/Resume";
 
-function ScrollToHashElement() {
-  const { pathname, hash } = useLocation();
-
-  useEffect(() => {
-    if (hash) {
-      const element = document.getElementById(hash.replace("#", ""));
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [pathname, hash]);
-
-  return null;
-}
-
-function NotFound() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-bg px-4 text-center">
-      <div className="max-w-md">
-        <div className="eyebrow mb-4">404</div>
-        <h1 className="font-display text-4xl tracking-tight text-fg">
-          This corner is empty.
-        </h1>
-        <p className="mt-3 text-sm text-fg-muted">
-          The page you're looking for doesn't exist.
-        </p>
-        <div className="mt-8">
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-fg transition-transform hover:-translate-y-0.5"
-          >
-            Return home
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+function parseRoute(hash: string) {
+  const cleanHash = hash.startsWith("#") ? hash.slice(1) : hash;
+  
+  if (cleanHash === "resume") {
+    return { page: "resume", slug: null };
+  }
+  if (cleanHash.startsWith("work/")) {
+    return { page: "case-study", slug: cleanHash.split("/")[1] || null };
+  }
+  if (cleanHash.startsWith("research/")) {
+    return { page: "research", slug: cleanHash.split("/")[1] || null };
+  }
+  return { page: "home", slug: cleanHash || null };
 }
 
 export default function App() {
-  return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <ScrollToHashElement />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work/:slug" element={<CaseStudy />} />
-        <Route path="/research/:slug" element={<ResearchStudy />} />
-        <Route path="/resume" element={<Resume />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  const [route, setRoute] = useState(() => parseRoute(window.location.hash));
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const parsed = parseRoute(window.location.hash);
+      setRoute(parsed);
+
+      if (parsed.page !== "home") {
+        // Scroll to top when opening a subpage
+        window.scrollTo(0, 0);
+      } else if (!parsed.slug) {
+        // Scroll to top on root home route
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  switch (route.page) {
+    case "resume":
+      return <Resume />;
+    case "case-study":
+      return <CaseStudy slug={route.slug || ""} />;
+    case "research":
+      return <ResearchStudy slug={route.slug || ""} />;
+    case "home":
+    default:
+      return <Home />;
+  }
 }

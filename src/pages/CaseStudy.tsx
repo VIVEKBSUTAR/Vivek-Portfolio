@@ -1,4 +1,3 @@
-import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, lazy, Suspense } from "react";
@@ -49,8 +48,11 @@ const metricCardVariants = {
   },
 };
 
-export function CaseStudy() {
-  const { slug } = useParams<{ slug: string }>();
+interface CaseStudyProps {
+  slug: string;
+}
+
+export function CaseStudy({ slug }: CaseStudyProps) {
   const project = projects.find((p) => p.slug === slug);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export function CaseStudy() {
         <div className="text-center">
           <div className="eyebrow mb-4">Not found</div>
           <h1 className="font-display text-3xl">This project doesn't exist.</h1>
-          <Link to="/#work" className="mt-6 inline-block text-accent underline">Back home</Link>
+          <a href="#work" className="mt-6 inline-block text-accent underline">Back home</a>
         </div>
       </div>
     );
@@ -88,12 +90,12 @@ export function CaseStudy() {
         className="mx-auto max-w-4xl px-6 pt-32 pb-24"
       >
         <motion.div variants={childVariants}>
-          <Link
-            to="/#work"
+          <a
+            href="#work"
             className="inline-flex items-center gap-2 text-sm text-fg-muted transition-colors hover:text-fg"
           >
             <ArrowLeft className="h-4 w-4" /> Back to work
-          </Link>
+          </a>
         </motion.div>
 
         <motion.header variants={childVariants} className="mt-10">
@@ -195,15 +197,15 @@ export function CaseStudy() {
 
         <motion.div variants={childVariants} className="mt-24 border-t border-border-hairline pt-8">
           <div className="eyebrow mb-3">Next</div>
-          <Link
-            to={`/work/${next.slug}`}
+          <a
+            href={`#work/${next.slug}`}
             className="group flex items-center justify-between active-compress"
           >
             <span className="font-display text-3xl tracking-tight text-fg transition-colors group-hover:text-accent">
               {next.title}
             </span>
             <ArrowUpRight className="h-6 w-6 text-fg-muted transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-          </Link>
+          </a>
         </motion.div>
       </motion.article>
       <Footer />

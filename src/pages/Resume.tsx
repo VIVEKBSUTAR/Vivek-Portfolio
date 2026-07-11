@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { ArrowLeft, Download } from "lucide-react";
 import { profile } from "@/data/profile";
 import { experience } from "@/data/experience";
@@ -9,9 +8,9 @@ export function Resume() {
     <div className="min-h-screen bg-bg text-fg">
       <div className="mx-auto max-w-3xl px-6 pt-16 pb-24">
         <div className="flex items-center justify-between print:hidden">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg">
+          <a href="#" className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg">
             <ArrowLeft className="h-4 w-4" /> Back
-          </Link>
+          </a>
           <div className="flex items-center gap-3">
             <button
               onClick={() => window.print()}
@@ -20,7 +19,7 @@ export function Resume() {
               Print Page
             </button>
             <a
-              href="/Vivek_Sutar_Resume.pdf"
+              href={`${import.meta.env.BASE_URL}Vivek_Sutar_Resume.pdf`}
               download="Vivek_Sutar_Resume.pdf"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:bg-accent/90 transition-colors"
             >
@@ -37,8 +36,10 @@ export function Resume() {
             <span>{profile.location}</span>
             <span>·</span>
             <span>{profile.email}</span>
-            {profile.socials.slice(0, 2).map((s) => (
-              <span key={s.label}>· {s.label}</span>
+            {profile.socials.map((s) => (
+              <span key={s.label}>
+                · <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-accent underline decoration-border-hairline underline-offset-4">{s.label}</a>
+              </span>
             ))}
           </div>
         </header>

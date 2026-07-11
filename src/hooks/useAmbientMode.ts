@@ -4,7 +4,6 @@
 // cross-fade its intensity without JS keyframes.
 
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 export type AmbientMode = "active" | "focused" | "resting";
 
@@ -12,15 +11,21 @@ const FAST_SCROLL_PX_PER_S = 1400;
 const IDLE_MS = 30_000;
 
 // Routes that force "focused" (reading views).
-const FOCUSED_ROUTE_PREFIXES = ["/work/", "/research/", "/resume"];
+const FOCUSED_ROUTE_PREFIXES = ["#work/", "#research/", "#resume"];
 
 export function useAmbientMode(): AmbientMode {
   const [mode, setMode] = useState<AmbientMode>("active");
-  const { pathname } = useLocation();
+  const [hash, setHash] = useState(() => window.location.hash);
+
+  useEffect(() => {
+    const handleHash = () => setHash(window.location.hash);
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
 
   // Route-driven mode takes precedence.
   const routeForcedFocus = FOCUSED_ROUTE_PREFIXES.some((p) =>
-    pathname.startsWith(p)
+    hash.startsWith(p)
   );
 
   useEffect(() => {
@@ -29,44 +34,49 @@ export function useAmbientMode(): AmbientMode {
       return;
     }
 
-    let idleTimer: ReturnType<typeof setTimeout> | null = null;
-    let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-    let lastScrollT = performance.now();
-    let scrollResetTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastY = window.scrollY;
+    let lastTime = performance.now();
+    let idleTimer: any = null;
 
     const resetIdle = () => {
+      setMode("active");
       if (idleTimer) clearTimeout(idleTimer);
-      // If we're not currently in fast-scroll focused, return to active.
-      setMode((m) => (m === "resting" ? "active" : m));
-      idleTimer = setTimeout(() => setMode("resting"), IDLE_MS);
+      idleTimer = setTimeout(() => {
+        setMode("resting");
+      }, IDLE_MS);
     };
 
-    const onScroll = () => {
+    const handleScroll = () => {
       const now = performance.now();
-      const dy = Math.abs(window.scrollY - lastScrollY);
-      const dt = now - lastScrollT;
-      const velocity = (dy / dt) * 1000; // px/s
-      lastScrollY = window.scrollY;
-      lastScrollT = now;
-      if (velocity > FAST_SCROLL_PX_PER_S) {
-        setMode("focused");
-        if (scrollResetTimer) clearTimeout(scrollResetTimer);
-        scrollResetTimer = setTimeout(() => setMode("active"), 900);
+      const dt = (now - lastTime) / 1000;
+      const dy = Math.abs(window.scrollY - lastY);
+
+      if (dt > 0.05) {
+        const vel = dy / dt;
+        if (vel > FAST_SCROLL_PX_PER_S) {
+          resetIdle();
+        }
+        lastY = window.scrollY;
+        lastTime = now;
       }
+    };
+
+    const handleMove = () => {
       resetIdle();
     };
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    window.addEventListener("touchstart", handleMove, { passive: true });
+
+    // Initial trigger
     resetIdle();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("pointermove", resetIdle, { passive: true });
-    window.addEventListener("keydown", resetIdle);
 
     return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("touchstart", handleMove);
       if (idleTimer) clearTimeout(idleTimer);
-      if (scrollResetTimer) clearTimeout(scrollResetTimer);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("pointermove", resetIdle);
-      window.removeEventListener("keydown", resetIdle);
     };
   }, [routeForcedFocus]);
 

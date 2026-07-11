@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import { fadeUp } from "@/lib/motion";
@@ -59,8 +58,8 @@ export function Projects() {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
               className={i % 3 === 0 ? "md:col-span-2" : ""}
             >
-              <Link
-                to={`/work/${p.slug}`}
+              <a
+                href={`#work/${p.slug}`}
                 data-hover-light
                 data-tilt-card
                 data-dim-item
@@ -130,7 +129,7 @@ export function Projects() {
                     {p.summary}
                   </p>
                 </div>
-              </Link>
+              </a>
             </motion.div>
           ))}
         </div>
