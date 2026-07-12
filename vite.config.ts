@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
-  base: "/Vivek-Portfolio/",
+  base: "",
   plugins: [
     react(),
     tailwindcss(),

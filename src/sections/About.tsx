@@ -17,7 +17,7 @@ export function About() {
           <motion.div {...fadeUp} className="relative">
             <div className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl border border-border-hairline shadow-glass group/portrait">
               <img
-                src={`${import.meta.env.BASE_URL}vivek.jpeg`}
+                src="vivek.jpeg"
                 alt="Vivek Balwant Sutar Portrait"
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/portrait:scale-105"
               />

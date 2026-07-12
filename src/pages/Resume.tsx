@@ -19,7 +19,7 @@ export function Resume() {
               Print Page
             </button>
             <a
-              href={`${import.meta.env.BASE_URL}Vivek_Sutar_Resume.pdf`}
+              href="Vivek_Sutar_Resume.pdf"
               download="Vivek_Sutar_Resume.pdf"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:bg-accent/90 transition-colors"
             >
