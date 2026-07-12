@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { profile } from "@/data/profile";
 import { HeroAtmosphere } from "@/components/HeroAtmosphere";
 import { MagneticButton } from "@/components/motion/MagneticButton";
@@ -11,36 +11,15 @@ const LazyHeroScene = lazy(() =>
 );
 
 export function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(true);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        setInView(entry.isIntersecting);
-      },
-      { threshold: 0 }
-    );
-
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
     <section
-      ref={containerRef}
       id="hero"
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-24"
     >
       <HeroAtmosphere />
-      {inView && (
-        <Suspense fallback={null}>
-          <LazyHeroScene />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <LazyHeroScene />
+      </Suspense>
 
       <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 gap-16 px-6 md:grid-cols-[1.4fr_1fr] md:items-end">
         <div>
