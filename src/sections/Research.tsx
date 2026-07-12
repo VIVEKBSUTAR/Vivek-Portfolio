@@ -1,9 +1,15 @@
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { research } from "@/data/research";
 import { fadeUp } from "@/lib/motion";
 
 export function Research() {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
+  }, []);
+
   return (
     <section id="research" className="relative py-32 md:py-40">
       <div className="mx-auto max-w-6xl px-6">
@@ -29,6 +35,7 @@ export function Research() {
                 href={`#research/${r.slug}`}
                 data-hover-light
                 onPointerMove={(e) => {
+                  if (isTouchDevice) return;
                   const r = e.currentTarget.getBoundingClientRect();
                   e.currentTarget.style.setProperty("--hx", `${e.clientX - r.left}px`);
                   e.currentTarget.style.setProperty("--hy", `${e.clientY - r.top}px`);

@@ -19,6 +19,10 @@ export function About() {
               <img
                 src="vivek.jpeg"
                 alt="Vivek Balwant Sutar Portrait"
+                width="384"
+                height="480"
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/portrait:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-bg/40 via-transparent to-transparent pointer-events-none" />

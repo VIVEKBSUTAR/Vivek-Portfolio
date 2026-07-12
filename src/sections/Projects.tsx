@@ -18,6 +18,7 @@ const covers: Record<string, string> = {
 export function Projects() {
   // Welcome-back rim glow on the previously opened project card.
   const [lastSlug, setLastSlug] = useState<string | null>(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   useEffect(() => {
     const stored = readMemory<{ slug: string; ts: number } | null>(
       MEMORY_KEYS.lastProject,
@@ -27,6 +28,7 @@ export function Projects() {
     if (stored && Date.now() - stored.ts < 30 * 24 * 60 * 60 * 1000) {
       setLastSlug(stored.slug);
     }
+    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
   }, []);
 
   return (
@@ -65,6 +67,7 @@ export function Projects() {
                 data-dim-item
                 data-last-project={lastSlug === p.slug ? "" : undefined}
                 onPointerMove={(e) => {
+                  if (isTouchDevice) return;
                   const r = e.currentTarget.getBoundingClientRect();
                   const x = (e.clientX - r.left) / r.width;
                   const y = (e.clientY - r.top) / r.height;
@@ -77,6 +80,7 @@ export function Projects() {
                   e.currentTarget.style.setProperty("--hy", `${e.clientY - r.top}px`);
                 }}
                 onPointerLeave={(e) => {
+                  if (isTouchDevice) return;
                   e.currentTarget.style.setProperty("--rx", "0deg");
                   e.currentTarget.style.setProperty("--ry", "0deg");
                 }}

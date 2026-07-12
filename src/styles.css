@@ -148,7 +148,10 @@
 
 @utility glass {
   background: color-mix(in oklch, var(--surface) 72%, transparent);
-  backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(8px) saturate(130%);
+  @media (min-width: 768px) {
+    backdrop-filter: blur(20px) saturate(150%);
+  }
   border: 1px solid var(--border-hairline);
   box-shadow: var(--shadow-glass);
 }

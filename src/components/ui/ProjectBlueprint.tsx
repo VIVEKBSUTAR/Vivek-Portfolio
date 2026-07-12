@@ -1,8 +1,12 @@
+import { memo } from "react";
+
 interface BlueprintProps {
   slug: string;
 }
 
-export function ProjectBlueprint({ slug }: BlueprintProps) {
+export const ProjectBlueprint = memo(function ProjectBlueprint({ slug }: BlueprintProps) {
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+  const stdDev = isMobile ? 0 : 6;
   const gridBackground = (
     <pattern id="blueprint-grid" width="20" height="20" patternUnits="userSpaceOnUse">
       <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-border-hairline/20" />
@@ -34,11 +38,11 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
           <defs>
             {gridBackground}
             <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
             <filter id="glow-amber" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -118,7 +122,7 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
           <defs>
             {gridBackground}
             <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -208,7 +212,7 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
           <defs>
             {gridBackground}
             <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -293,7 +297,7 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
           <defs>
             {gridBackground}
             <filter id="glow-copper" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -371,7 +375,7 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
           <defs>
             {gridBackground}
             <filter id="glow-security" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -466,7 +470,7 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
           <defs>
             {gridBackground}
             <filter id="glow-violet" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feGaussianBlur stdDeviation={stdDev} result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -557,4 +561,4 @@ export function ProjectBlueprint({ slug }: BlueprintProps) {
     default:
       return null;
   }
-}
+});

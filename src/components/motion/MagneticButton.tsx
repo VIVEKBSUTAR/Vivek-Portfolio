@@ -3,7 +3,7 @@
 // radius. Response is spring-eased (~180ms). Disabled on touch and when
 // prefers-reduced-motion is set.
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useEffect, useState, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -27,8 +27,13 @@ export function MagneticButton({
   const sx = useSpring(x, { stiffness: 140, damping: 18, mass: 0.8 });
   const sy = useSpring(y, { stiffness: 140, damping: 18, mass: 0.8 });
 
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
+  }, []);
+
   const onMove = (e: React.PointerEvent) => {
-    if (reduced || !ref.current) return;
+    if (reduced || isTouchDevice || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;

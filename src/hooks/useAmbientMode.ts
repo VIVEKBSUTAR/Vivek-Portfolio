@@ -34,6 +34,13 @@ export function useAmbientMode(): AmbientMode {
       return;
     }
 
+    // Skip all dynamic activity tracking on mobile
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) {
+      setMode("active");
+      return;
+    }
+
     let lastY = window.scrollY;
     let lastTime = performance.now();
     let idleTimer: any = null;

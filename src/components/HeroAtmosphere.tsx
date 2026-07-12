@@ -1,9 +1,16 @@
+import { useEffect, useState } from "react";
+
 // A CSS-only atmospheric layer: a slow-drifting warm-amber glow disc, a second
-// cool-cyan disc for tension, plus a soft radial vignette. Fills the "3D
-// atmosphere" role at zero JS cost; the real Three.js scene can replace it
-// later without touching layout.
+// cool-cyan disc for tension, plus a soft radial vignette.
+// Optimized for mobile screens by disabling blur filters to lower paint costs.
 
 export function HeroAtmosphere() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+  }, []);
+
   return (
     <div
       aria-hidden
@@ -15,7 +22,7 @@ export function HeroAtmosphere() {
         style={{
           background:
             "radial-gradient(closest-side, oklch(0.78 0.15 65 / 0.55), oklch(0.78 0.15 65 / 0) 70%)",
-          filter: "blur(20px)",
+          filter: isMobile ? undefined : "blur(20px)",
           animation: "drift 18s ease-in-out infinite",
         }}
       />
@@ -25,7 +32,7 @@ export function HeroAtmosphere() {
         style={{
           background:
             "radial-gradient(closest-side, oklch(0.65 0.08 210 / 0.35), oklch(0.65 0.08 210 / 0) 70%)",
-          filter: "blur(24px)",
+          filter: isMobile ? undefined : "blur(24px)",
           animation: "drift-slow 26s ease-in-out infinite",
         }}
       />

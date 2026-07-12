@@ -39,12 +39,14 @@ export function AmbientEnvironment() {
   const rafRef = useRef<number | null>(null);
   const [tint, setTint] = useState<Tint>(DEFAULT_TINT);
   const [touch, setTouch] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [scrollVelocity, setScrollVelocity] = useState(0);
 
-  // Detect touch — cursor-light off entirely on touch devices.
+  // Detect environment factors on mount
   useEffect(() => {
     if (typeof window === "undefined") return;
     setTouch(window.matchMedia("(hover: none)").matches);
+    setIsMobile(window.matchMedia("(max-width: 768px)").matches);
   }, []);
 
   // Cursor-light: lerp toward mouse position at ~60% lag.
@@ -75,9 +77,9 @@ export function AmbientEnvironment() {
     };
   }, [reduced, touch]);
 
-  // Environmental Intelligence: track real-time scroll velocity to dampen ambient noise
+  // Environmental Intelligence: track scroll velocity to dampen ambient noise (DESKTOP ONLY)
   useEffect(() => {
-    if (typeof window === "undefined" || reduced) return;
+    if (typeof window === "undefined" || reduced || isMobile) return;
     let lastScrollY = window.scrollY;
     let lastTime = performance.now();
     let frameId: number;
@@ -88,19 +90,19 @@ export function AmbientEnvironment() {
       const dy = Math.abs(currentScrollY - lastScrollY);
       const dt = Math.max(1, now - lastTime);
       const velocity = (dy / dt) * 1000; // px/second
-      
+
       lastScrollY = currentScrollY;
       lastTime = now;
-      
+
       // Low-pass filter for smooth velocity transitions
       setScrollVelocity((prev) => prev + (velocity - prev) * 0.15);
-      
+
       frameId = requestAnimationFrame(checkVelocity);
     };
-    
+
     frameId = requestAnimationFrame(checkVelocity);
     return () => cancelAnimationFrame(frameId);
-  }, [reduced]);
+  }, [reduced, isMobile]);
 
   // Section tint: watch which section id crosses viewport center.
   useEffect(() => {
@@ -127,11 +129,10 @@ export function AmbientEnvironment() {
     return () => io.disconnect();
   }, []);
 
-  // Static particulate positions — memoized so React never re-lays them out.
-  // Drift timings are extended using prime numbers to avoid repeating cycles.
+  // Static particulate positions — memoized and adaptive count
   const particles = useMemo(
     () =>
-      Array.from({ length: 32 }, (_, i) => ({
+      Array.from({ length: isMobile ? 12 : 32 }, (_, i) => ({
         id: i,
         left: `${(i * 137.5) % 100}%`,
         top: `${(i * 91.7) % 100}%`,
@@ -140,13 +141,15 @@ export function AmbientEnvironment() {
         duration: `${30 + ((i * 11) % 23)}s`,
         opacity: 0.03 + ((i % 5) * 0.009),
       })),
-    []
+    [isMobile]
   );
 
   const tintColor = `oklch(0.78 ${tint.chroma} ${tint.hue})`;
 
-  // Calculate scrolling dampening factor (1.0 = static/calm, drops during rapid scroll)
-  const scrollDampener = Math.max(0.1, Math.min(1.0, 1.0 - (scrollVelocity - 100) / 1800));
+  // Calculate scrolling dampening factor (static 1.0 on mobile to avoid layout calculations)
+  const scrollDampener = isMobile
+    ? 1.0
+    : Math.max(0.1, Math.min(1.0, 1.0 - (scrollVelocity - 100) / 1800));
 
   // Intensity multiplier per mode — focused reading drops intensity to 0.22.
   const baseIntensity = mode === "resting" ? 0.15 : mode === "focused" ? 0.22 : 0.85;
@@ -171,7 +174,7 @@ export function AmbientEnvironment() {
         style={{
           background: `radial-gradient(closest-side, ${tintColor}, transparent 70%)`,
           opacity: 0.35,
-          filter: "blur(40px)",
+          filter: isMobile ? undefined : "blur(40px)", // bypass blurs on mobile
           animation: reduced ? undefined : "drift 37s ease-in-out infinite",
           transition: "background 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
         }}
@@ -183,7 +186,7 @@ export function AmbientEnvironment() {
         style={{
           background: `radial-gradient(closest-side, ${tintColor}, transparent 70%)`,
           opacity: 0.22,
-          filter: "blur(50px)",
+          filter: isMobile ? undefined : "blur(50px)", // bypass blurs on mobile
           animation: reduced ? undefined : "drift-slow 53s ease-in-out infinite",
           transition: "background 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
         }}
@@ -202,7 +205,7 @@ export function AmbientEnvironment() {
                 width: p.size,
                 height: p.size,
                 opacity: p.opacity,
-                filter: "blur(0.5px)",
+                filter: isMobile ? undefined : "blur(0.5px)",
                 animation: `mote ${p.duration} ease-in-out ${p.delay} infinite`,
               }}
             />
@@ -211,7 +214,7 @@ export function AmbientEnvironment() {
       )}
 
       {/* Volumetric fog — soft displaced plane, breathes independently */}
-      {!reduced && (
+      {!reduced && !isMobile && (
         <div
           className="absolute inset-0"
           style={{
